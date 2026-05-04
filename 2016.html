@@ -6,27 +6,46 @@
     <title>Tobias Wagner | Archiv 2016</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #0d1117; color: #c9d1d9; font-family: -apple-system, sans-serif; margin: 0; height: 100vh; display: flex; overflow: hidden; }
-        .bg-glow { background: radial-gradient(circle at 50% 50%, #1c1c3d 0%, #0d1117 100%); }
+        body { background-color: #0d1117; color: #c9d1d9; font-family: -apple-system, sans-serif; margin: 0; min-height: 100vh; }
+        .bg-glow { background: radial-gradient(circle at 50% 50%, #1c1c3d 0%, #0d1117 100%); background-attachment: fixed; }
         .connector { width: 2px; height: 20px; background-color: #30363d; margin-left: 22px; }
         .sub-nav-item.active { color: #58a6ff; font-weight: bold; border-left: 2px solid #58a6ff; padding-left: 10px; margin-left: -11px; }
-        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
-        #lightbox img { max-width: 90%; max-height: 85%; border: 1px solid #30363d; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
+        
+        /* Mobil-Overlay für Sidebar */
+        @media (max-width: 1023px) {
+            #sidebar { position: fixed; transform: translateX(-100%); transition: transform 0.3s ease; z-index: 50; height: 100vh; }
+            #sidebar.open { transform: translateX(0); }
+            #overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 40; backdrop-filter: blur(4px); }
+            #overlay.open { display: block; }
+        }
+
+        #lightbox { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
+        #lightbox img { max-width: 95%; max-height: 80vh; border: 1px solid #30363d; }
     </style>
 </head>
-<body class="bg-glow">
-    <div id="lightbox" onclick="this.style.display='none'">
-        <span class="absolute top-5 right-10 text-white text-4xl cursor-pointer hover:text-[#58a6ff] transition-colors">&times;</span>
-        <img id="lightbox-img" src="" alt="Vollbildansicht">
-    </div>
-    <aside class="w-72 border-r border-[#30363d] bg-[#0d1117]/80 backdrop-blur-md flex flex-col p-6 shrink-0">
-        <div class="mb-10">
+<body class="bg-glow flex flex-col lg:flex-row">
+
+    <!-- Mobiler Header -->
+    <header class="lg:hidden w-full p-4 border-b border-[#30363d] bg-[#0d1117]/90 backdrop-blur-md flex justify-between items-center sticky top-0 z-30">
+        <div>
+            <h1 class="text-white text-lg font-bold">Tobias Wagner</h1>
+        </div>
+        <button onclick="toggleMenu()" class="p-2 text-[#8b949e] hover:text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+        </button>
+    </header>
+
+    <div id="overlay" onclick="toggleMenu()"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="w-72 border-r border-[#30363d] bg-[#0d1117] flex flex-col p-6 shrink-0 overflow-y-auto">
+        <div class="mb-10 hidden lg:block">
             <h1 class="text-white text-xl font-bold tracking-tight">Tobias Wagner</h1>
             <p class="text-[#484f58] text-xs font-mono mt-1">main-portfolio</p>
         </div>
-        <nav>
+        <nav class="space-y-1">
             <div class="nav-item bg-[#21262d] p-3 rounded-lg border border-[#30363d] shadow-md">
                 <div class="text-sm text-white mb-3 font-medium">Fotografie</div>
                 <div class="pl-4 space-y-2 border-l border-[#30363d] ml-2 text-[#8b949e]">
@@ -49,39 +68,58 @@
             </div>
         </nav>
     </aside>
-    <main class="flex-1 overflow-y-auto p-8 lg:p-12">
-        <div class="max-w-5xl mx-auto space-y-8">
-            <div class="border border-[#30363d] rounded-xl bg-[#0d1117] p-8 shadow-2xl">
-                <h2 class="text-3xl font-bold text-white mb-2">Archiv 2016</h2>
-                <p class="text-[#8b949e]">Auswahl technischer Aufnahmen aus dem Jahr 2016.</p>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-4 md:p-8 lg:p-12">
+        <div id="lightbox" onclick="this.style.display='none'">
+            <span class="absolute top-5 right-10 text-white text-4xl cursor-pointer">&times;</span>
+            <img id="lightbox-img" src="" alt="Vollbild" class="rounded-lg">
+        </div>
+
+        <div class="max-w-5xl mx-auto space-y-6 md:space-y-8">
+            <div class="border border-[#30363d] rounded-xl bg-[#0d1117]/50 p-6 md:p-8 shadow-2xl backdrop-blur-sm">
+                <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">Archiv 2016</h2>
+                <p class="text-[#8b949e] text-sm md:base">Auswahl technischer Aufnahmen aus dem Jahr 2016.</p>
             </div>
-            <div id="gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+            <div id="gallery" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8"></div>
         </div>
     </main>
+
     <script>
+        // Menu Toggle für Mobile
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('open');
+        }
+
         const imageData = [
             { id: '20170514-001', title: 'Aufnahme 001', desc: 'Beschreibung hier einfügen.', mm: '50mm', f: '1.8', s: '1/200s', iso: '100' },
             { id: '20170514-005', title: 'Aufnahme 002', desc: 'Beschreibung hier einfügen.', mm: '35mm', f: '2.8', s: '1/500s', iso: '200' },
             { id: '20170514-003', title: 'Aufnahme 003', desc: 'Beschreibung hier einfügen.', mm: '85mm', f: '1.4', s: '1/1000s', iso: '100' }
         ];
+
         document.getElementById('gallery').innerHTML = imageData.map(img => `
             <div class="border border-[#30363d] rounded-xl bg-[#161b22] overflow-hidden flex flex-col group hover:border-[#58a6ff] transition-all shadow-lg">
                 <div class="cursor-pointer aspect-square bg-black overflow-hidden" onclick="openImage('2016/${img.id}.jpg')">
-                    <img src="2016/${img.id}.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <img src="2016/${img.id}.jpg" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
                 </div>
                 <div class="p-5 flex flex-col flex-1">
                     <h3 class="text-white font-bold mb-1">${img.title}</h3>
                     <p class="text-xs text-[#8b949e] mb-4 flex-1">${img.desc}</p>
                     <div class="grid grid-cols-2 gap-2 pt-4 border-t border-[#30363d] font-mono text-[10px]">
-                        <div class="flex flex-col"><span class="text-[#484f58] font-bold uppercase tracking-wider">Brennweite</span><span>${img.mm}</span></div>
-                        <div class="flex flex-col"><span class="text-[#484f58] font-bold uppercase tracking-wider">Blende</span><span>f/${img.f}</span></div>
-                        <div class="flex flex-col"><span class="text-[#484f58] font-bold uppercase tracking-wider">Zeit</span><span>${img.s}</span></div>
-                        <div class="flex flex-col"><span class="text-[#484f58] font-bold uppercase tracking-wider">ISO</span><span>${img.iso}</span></div>
+                        <div class="flex flex-col"><span class="text-[#484f58] font-bold uppercase">Brennweite</span><span>${img.mm}</span></div>
+                        <div class="flex flex-col"><span class="text-[#484f58] font-bold uppercase">Blende</span><span>f/${img.f}</span></div>
+                        <div class="flex flex-col"><span class="text-[#484f58] font-bold uppercase">Zeit</span><span>${img.s}</span></div>
+                        <div class="flex flex-col"><span class="text-[#484f58] font-bold uppercase">ISO</span><span>${img.iso}</span></div>
                     </div>
                 </div>
             </div>
         `).join('');
-        function openImage(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').style.display = 'flex'; }
+
+        function openImage(src) { 
+            document.getElementById('lightbox-img').src = src; 
+            document.getElementById('lightbox').style.display = 'flex'; 
+        }
     </script>
 </body>
 </html>
